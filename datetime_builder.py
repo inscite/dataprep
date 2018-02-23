@@ -49,14 +49,43 @@ def main():
         months = list(range(1, 1+12))
     elif mode == 'yearmonth' and len(argv) -1 == 4:
         months = [int(month) for month in filter(None, str(argv[4]).split(sep=','))]
+    elif mode == 'ymdmh' and len(argv) -1 == 6:
+        # year loop
+        years = [int(year) for year in filter(None, str(argv[3]).split(sep=','))]
+
+        # month loop
+        if str(argv[4]).lower() == 'full':
+            months = list(range(1, 1 + 12))
+        else:
+            months = [int(month) for month in filter(None, str(argv[4]).split(sep=','))]
+
+        # hour loop
+        if str(argv[5]).lower() == 'full':
+            hours = list(range(0, 24))
+        else:
+            hours = [int(hour) for hour in filter(None, str(argv[5]).split(sep=','))]
+
+        # minute loop
+        if str(argv[6]).lower() == 'full':
+            minutes = list(range(0, 60))
+        else:
+            minutes = [int(minute) for minute in filter(None, str(argv[6]).split(sep=','))]
     else:
         pass
 
     for year, month in product(years, months):
         list_ymd = cal_builder(year, month)
 
-        for ymd in list_ymd:
-            f.write(str('{:s}\n').format(ymd))
+        if mode == 'ymdmh':
+            list_ts = product(list_ymd, hours, minutes)
+            for ymd, hour, minute in list_ts:
+                f.write(str('{:s}{:02d}{:02d}\n').format(ymd, hour, minute))
+        else:
+            list_ts = list_ymd
+            for ts in list_ts:
+                f.write(str('{:s}\n').format(ts))
+
+        # regular flush
         f.flush()
 
     # close file handler
