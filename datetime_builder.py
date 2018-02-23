@@ -43,7 +43,8 @@ def main():
 
     f = open(file=path_out, mode='w')
 
-    years, months = None, None
+    years, months, hours, minutes = None, None, None, None
+
     if mode == 'year' and len(argv) -1 == 3:
         years = [int(year) for year in filter(None, str(argv[3]).split(sep=','))]
         months = list(range(1, 1+12))
